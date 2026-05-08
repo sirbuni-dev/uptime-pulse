@@ -8,8 +8,8 @@
             autocomplete="new-password"
         ></HiddenInput>
         <i18n-t tag="div" keypath="360messengerWayToGetUrlAndToken" class="form-text">
-            <a href="https://360messenger.com/en/uptime-kuma" target="_blank">
-                https://360messenger.com/en/uptime-kuma
+            <a href="https://360messenger.com/en/uptime-pulse" target="_blank">
+                https://360messenger.com/en/uptime-pulse
             </a>
         </i18n-t>
     </div>
@@ -117,7 +117,7 @@ export default {
         Whatsapp360messengerTemplatedTextareaPlaceholder() {
             return this.$t("Example:", [
                 `
-Uptime Kuma Alert{% if monitorJSON %} - {{ monitorJSON['name'] }}{% endif %}
+Uptime Pulse Alert{% if monitorJSON %} - {{ monitorJSON['name'] }}{% endif %}
 
 {{ msg }}
                 `,

@@ -20,7 +20,7 @@ async function* walk(dir) {
     }
 }
 
-const UPSTREAM_EN_JSON = "https://raw.githubusercontent.com/louislam/uptime-kuma/refs/heads/master/src/lang/en.json";
+const UPSTREAM_EN_JSON = "https://raw.githubusercontent.com/louislam/uptime-pulse/refs/heads/master/src/lang/en.json";
 
 /**
  * Extract `{placeholders}` from a translation string.
@@ -127,7 +127,7 @@ describe("Check Translations", () => {
                 report += "\n     |";
                 report += `\n     = note: please register the translation key '${key}' in en.json so that our awesome team of translators can translate them`;
                 report +=
-                    "\n     = tip: if you want to contribute translations, please visit https://weblate.kuma.pet\n";
+                    "\n     = tip: if you want to contribute translations, please visit https://weblate.pulse.pet\n";
             });
             report += "\n===============================";
             const fileCount = new Set(missingKeys.map((item) => item.filePath)).size;

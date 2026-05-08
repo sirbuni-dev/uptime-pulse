@@ -1,33 +1,33 @@
 <div align="center" width="100%">
-    <img src="./public/icon.svg" width="128" alt="Uptime Kuma Logo" />
+    <img src="./public/icon.svg" width="128" alt="Uptime Pulse Logo" />
 </div>
 
-# Uptime Kuma
+# Uptime Pulse
 
-Uptime Kuma is an easy-to-use self-hosted monitoring tool.
+Uptime Pulse is an easy-to-use self-hosted monitoring tool.
 
-<a target="_blank" href="https://github.com/louislam/uptime-kuma"><img src="https://img.shields.io/github/stars/louislam/uptime-kuma?style=flat" /></a> <a target="_blank" href="https://hub.docker.com/r/louislam/uptime-kuma"><img src="https://img.shields.io/docker/pulls/louislam/uptime-kuma" /></a> <a target="_blank" href="https://hub.docker.com/r/louislam/uptime-kuma"><img src="https://img.shields.io/docker/v/louislam/uptime-kuma/2?label=docker%20image%20ver." /></a> <a target="_blank" href="https://github.com/louislam/uptime-kuma"><img src="https://img.shields.io/github/last-commit/louislam/uptime-kuma" /></a> <a target="_blank" href="https://opencollective.com/uptime-kuma"><img src="https://opencollective.com/uptime-kuma/total/badge.svg?label=Open%20Collective%20Backers&color=brightgreen" /></a>
-[![GitHub Sponsors](https://img.shields.io/github/sponsors/louislam?label=GitHub%20Sponsors)](https://github.com/sponsors/louislam) <a href="https://weblate.kuma.pet/projects/uptime-kuma/uptime-kuma/">
-<img src="https://weblate.kuma.pet/widgets/uptime-kuma/-/svg-badge.svg" alt="Translation status" />
+<a target="_blank" href="https://github.com/louislam/uptime-pulse"><img src="https://img.shields.io/github/stars/louislam/uptime-pulse?style=flat" /></a> <a target="_blank" href="https://hub.docker.com/r/louislam/uptime-pulse"><img src="https://img.shields.io/docker/pulls/louislam/uptime-pulse" /></a> <a target="_blank" href="https://hub.docker.com/r/louislam/uptime-pulse"><img src="https://img.shields.io/docker/v/louislam/uptime-pulse/2?label=docker%20image%20ver." /></a> <a target="_blank" href="https://github.com/louislam/uptime-pulse"><img src="https://img.shields.io/github/last-commit/louislam/uptime-pulse" /></a> <a target="_blank" href="https://opencollective.com/uptime-pulse"><img src="https://opencollective.com/uptime-pulse/total/badge.svg?label=Open%20Collective%20Backers&color=brightgreen" /></a>
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/louislam?label=GitHub%20Sponsors)](https://github.com/sponsors/louislam) <a href="https://weblate.pulse.pet/projects/uptime-pulse/uptime-pulse/">
+<img src="https://weblate.pulse.pet/widgets/uptime-pulse/-/svg-badge.svg" alt="Translation status" />
 </a>
 
-<img src="https://user-images.githubusercontent.com/1336778/212262296-e6205815-ad62-488c-83ec-a5b0d0689f7c.jpg" width="700" alt="Uptime Kuma Dashboard Screenshot" />
+<img src="https://user-images.githubusercontent.com/1336778/212262296-e6205815-ad62-488c-83ec-a5b0d0689f7c.jpg" width="700" alt="Uptime Pulse Dashboard Screenshot" />
 
 ## 🥔 Live Demo
 
 Try it!
 
-Demo Server (Location: Frankfurt - Germany): <https://demo.kuma.pet/start-demo>
+Demo Server (Location: Frankfurt - Germany): <https://demo.pulse.pet/start-demo>
 
-It is a temporary live demo, all data will be deleted after 10 minutes. Sponsored by [Uptime Kuma Sponsors](https://github.com/louislam/uptime-kuma#%EF%B8%8F-sponsors).
+It is a temporary live demo, all data will be deleted after 10 minutes. Sponsored by [Uptime Pulse Sponsors](https://github.com/louislam/uptime-pulse#%EF%B8%8F-sponsors).
 
 ## ⭐ Features
 
 - Monitoring uptime for HTTP(s) / TCP / HTTP(s) Keyword / HTTP(s) Json Query / Websocket / Ping / DNS Record / Push / Steam Game Server / Docker Containers
 - Fancy, Reactive, Fast UI/UX
-- Notifications via Telegram, Discord, Gotify, Slack, Pushover, Email (SMTP), and [90+ notification services, click here for the full list](https://github.com/louislam/uptime-kuma/tree/master/src/components/notifications)
+- Notifications via Telegram, Discord, Gotify, Slack, Pushover, Email (SMTP), and [90+ notification services, click here for the full list](https://github.com/louislam/uptime-pulse/tree/master/src/components/notifications)
 - 20-second intervals
-- [Multi Languages](https://github.com/louislam/uptime-kuma/tree/master/src/lang)
+- [Multi Languages](https://github.com/louislam/uptime-pulse/tree/master/src/lang)
 - Multiple status pages
 - Map status pages to specific domains
 - Ping chart
@@ -40,13 +40,13 @@ It is a temporary live demo, all data will be deleted after 10 minutes. Sponsore
 ### 🐳 Docker Compose
 
 ```bash
-mkdir uptime-kuma
-cd uptime-kuma
-curl -o compose.yaml https://raw.githubusercontent.com/louislam/uptime-kuma/master/compose.yaml
+mkdir uptime-pulse
+cd uptime-pulse
+curl -o compose.yaml https://raw.githubusercontent.com/louislam/uptime-pulse/master/compose.yaml
 docker compose up -d
 ```
 
-Uptime Kuma is now running on all network interfaces (e.g. http://localhost:3001 or http://your-ip:3001).
+Uptime Pulse is now running on all network interfaces (e.g. http://localhost:3001 or http://your-ip:3001).
 
 > [!WARNING]
 > File Systems like **NFS** (Network File System) are **NOT** supported. Please map to a local directory or volume.
@@ -54,10 +54,10 @@ Uptime Kuma is now running on all network interfaces (e.g. http://localhost:3001
 ### 🐳 Docker Command
 
 ```bash
-docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:2
+docker run -d --restart=always -p 3001:3001 -v uptime-pulse:/app/data --name uptime-pulse louislam/uptime-pulse:2
 ```
 
-Uptime Kuma is now running on all network interfaces (e.g. http://localhost:3001 or http://your-ip:3001).
+Uptime Pulse is now running on all network interfaces (e.g. http://localhost:3001 or http://your-ip:3001).
 
 If you want to limit exposure to localhost only:
 
@@ -76,11 +76,11 @@ Requirements:
   - ❌ Replit / Heroku
 - [Node.js](https://nodejs.org/en/download/) >= 20.4
 - [Git](https://git-scm.com/downloads)
-- [pm2](https://pm2.keymetrics.io/) - For running Uptime Kuma in the background
+- [pm2](https://pm2.keymetrics.io/) - For running Uptime Pulse in the background
 
 ```bash
-git clone https://github.com/louislam/uptime-kuma.git
-cd uptime-kuma
+git clone https://github.com/louislam/uptime-pulse.git
+cd uptime-pulse
 npm run setup
 
 # Option 1. Try it
@@ -91,10 +91,10 @@ node server/server.js
 npm install pm2 -g && pm2 install pm2-logrotate
 
 # Start Server
-pm2 start server/server.js --name uptime-kuma
+pm2 start server/server.js --name uptime-pulse
 ```
 
-Uptime Kuma is now running on all network interfaces (e.g. http://localhost:3001 or http://your-ip:3001).
+Uptime Pulse is now running on all network interfaces (e.g. http://localhost:3001 or http://your-ip:3001).
 
 More useful PM2 Commands
 
@@ -110,43 +110,43 @@ pm2 startup && pm2 save
 
 If you need more options or need to browse via a reverse proxy, please read:
 
-<https://github.com/louislam/uptime-kuma/wiki/%F0%9F%94%A7-How-to-Install>
+<https://github.com/louislam/uptime-pulse/wiki/%F0%9F%94%A7-How-to-Install>
 
 ## 🆙 How to Update
 
 Please read:
 
-<https://github.com/louislam/uptime-kuma/wiki/%F0%9F%86%99-How-to-Update>
+<https://github.com/louislam/uptime-pulse/wiki/%F0%9F%86%99-How-to-Update>
 
 ## 🆕 What's Next?
 
 I will assign requests/issues to the next milestone.
 
-<https://github.com/louislam/uptime-kuma/milestones>
+<https://github.com/louislam/uptime-pulse/milestones>
 
 ## ❤️ Sponsors
 
 Thank you so much! (GitHub Sponsors will be updated manually. OpenCollective sponsors will be updated automatically, the list will be cached by GitHub though. It may need some time to be updated)
 
-<img src="https://uptime.kuma.pet/sponsors?v=6" alt="Uptime Kuma Sponsors" />
+<img src="https://uptime.pulse.pet/sponsors?v=6" alt="Uptime Pulse Sponsors" />
 
 ## 🖼 More Screenshots
 
 Light Mode:
 
-<img src="https://uptime.kuma.pet/img/light.jpg" width="512" alt="Uptime Kuma Light Mode Screenshot of how the Dashboard looks" />
+<img src="https://uptime.pulse.pet/img/light.jpg" width="512" alt="Uptime Pulse Light Mode Screenshot of how the Dashboard looks" />
 
 Status Page:
 
-<img src="https://user-images.githubusercontent.com/1336778/134628766-a3fe0981-0926-4285-ab46-891a21c3e4cb.png" width="512" alt="Uptime Kuma Status Page Screenshot" />
+<img src="https://user-images.githubusercontent.com/1336778/134628766-a3fe0981-0926-4285-ab46-891a21c3e4cb.png" width="512" alt="Uptime Pulse Status Page Screenshot" />
 
 Settings Page:
 
-<img src="https://louislam.net/uptimekuma/2.jpg" width="400" alt="Uptime Kuma Settings Page Screenshot" />
+<img src="https://louislam.net/uptimepulse/2.jpg" width="400" alt="Uptime Pulse Settings Page Screenshot" />
 
 Telegram Notification Sample:
 
-<img src="https://louislam.net/uptimekuma/3.jpg" width="400" alt="Uptime Kuma Telegram Notification Sample Screenshot" />
+<img src="https://louislam.net/uptimepulse/3.jpg" width="400" alt="Uptime Pulse Telegram Notification Sample Screenshot" />
 
 ## Motivation
 
@@ -163,10 +163,10 @@ If you love this project, please consider giving it a ⭐.
 
 ⚠️ For any general or technical questions, please don't send me an email, as I am unable to provide support in that manner. I will not respond if you ask questions there.
 
-I recommend using Google, GitHub Issues, or Uptime Kuma's subreddit for finding answers to your question. If you cannot find the information you need, feel free to ask:
+I recommend using Google, GitHub Issues, or Uptime Pulse's subreddit for finding answers to your question. If you cannot find the information you need, feel free to ask:
 
-- [GitHub Issues](https://github.com/louislam/uptime-kuma/issues)
-- [Subreddit (r/UptimeKuma)](https://www.reddit.com/r/UptimeKuma/)
+- [GitHub Issues](https://github.com/louislam/uptime-pulse/issues)
+- [Subreddit (r/UptimePulse)](https://www.reddit.com/r/UptimePulse/)
 
 My Reddit account: [u/louislamlam](https://reddit.com/u/louislamlam)
 You can mention me if you ask a question on the subreddit.
@@ -176,26 +176,26 @@ You can mention me if you ask a question on the subreddit.
 ### Create Pull Requests
 
 Pull requests are awesome.
-To keep reviews fast and effective, please make sure you’ve [read our pull request guidelines](https://github.com/louislam/uptime-kuma/blob/master/CONTRIBUTING.md#can-i-create-a-pull-request-for-uptime-kuma).
+To keep reviews fast and effective, please make sure you’ve [read our pull request guidelines](https://github.com/louislam/uptime-pulse/blob/master/CONTRIBUTING.md#can-i-create-a-pull-request-for-uptime-pulse).
 
 ### Test Pull Requests
 
 There are a lot of pull requests right now, but I don't have time to test them all.
 
 If you want to help, you can check this:
-<https://github.com/louislam/uptime-kuma/wiki/Test-Pull-Requests>
+<https://github.com/louislam/uptime-pulse/wiki/Test-Pull-Requests>
 
 ### Test Beta Version
 
-Check out the latest beta release here: <https://github.com/louislam/uptime-kuma/releases>
+Check out the latest beta release here: <https://github.com/louislam/uptime-pulse/releases>
 
 ### Bug Reports / Feature Requests
 
-If you want to report a bug or request a new feature, feel free to open a [new issue](https://github.com/louislam/uptime-kuma/issues).
+If you want to report a bug or request a new feature, feel free to open a [new issue](https://github.com/louislam/uptime-pulse/issues).
 
 ### Translations
 
-If you want to translate Uptime Kuma into your language, please visit [Weblate Readme](https://github.com/louislam/uptime-kuma/blob/master/src/lang/README.md).
+If you want to translate Uptime Pulse into your language, please visit [Weblate Readme](https://github.com/louislam/uptime-pulse/blob/master/src/lang/README.md).
 
 ### Spelling & Grammar
 

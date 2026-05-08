@@ -81,7 +81,7 @@
                 {{ $t("aboutChannelName", ["slack"]) }}
             </p>
             <p style="margin-top: 8px">
-                {{ $t("aboutKumaURL") }}
+                {{ $t("aboutPulseURL") }}
             </p>
             <i18n-t tag="p" keypath="emojiCheatSheet" style="margin-top: 8px">
                 <a href="https://www.webfx.com/tools/emoji-cheat-sheet/" target="_blank">
@@ -116,7 +116,7 @@ export default {
         slackTemplatedTextareaPlaceholder() {
             return this.$t("Example:", [
                 `
-Uptime Kuma Alert{% if monitorJSON %} - {{ monitorJSON['name'] }}{% endif %}
+Uptime Pulse Alert{% if monitorJSON %} - {{ monitorJSON['name'] }}{% endif %}
 {% if monitorJSON and monitorJSON.path and monitorJSON.path.length > 1 %}_{{ monitorJSON.path.slice(0, -1).join(' / ') }}_\n{% endif %}
 {{ msg }}
                 `,

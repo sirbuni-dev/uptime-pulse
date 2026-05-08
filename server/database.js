@@ -11,7 +11,7 @@ const { Settings } = require("./settings");
 const { UptimeCalculator } = require("./uptime-calculator");
 const dayjs = require("dayjs");
 const { SimpleMigrationServer } = require("./utils/simple-migration-server");
-const KumaColumnCompiler = require("./utils/knex/lib/dialects/mysql2/schema/mysql2-columncompiler");
+const PulseColumnCompiler = require("./utils/knex/lib/dialects/mysql2/schema/mysql2-columncompiler");
 const SqlString = require("sqlstring");
 
 /**
@@ -22,7 +22,7 @@ class Database {
      * Bootstrap database for SQLite
      * @type {string}
      */
-    static templatePath = "./db/kuma.db";
+    static templatePath = "./db/pulse.db";
 
     /**
      * Data Dir (Default: ./data)
@@ -43,7 +43,7 @@ class Database {
     static screenshotDir;
 
     /**
-     * SQLite file path (Default: ./data/kuma.db)
+     * SQLite file path (Default: ./data/pulse.db)
      * @type {string}
      */
     static sqlitePath;
@@ -136,7 +136,7 @@ class Database {
         // Data Directory (must be end with "/")
         Database.dataDir = process.env.DATA_DIR || args["data-dir"] || "./data/";
 
-        Database.sqlitePath = path.join(Database.dataDir, "kuma.db");
+        Database.sqlitePath = path.join(Database.dataDir, "pulse.db");
         if (!fs.existsSync(Database.dataDir)) {
             fs.mkdirSync(Database.dataDir, { recursive: true });
         }
@@ -205,7 +205,7 @@ class Database {
         const { getDialectByNameOrAlias } = require("knex/lib/dialects");
         const mysql2 = getDialectByNameOrAlias("mysql2");
         mysql2.prototype.columnCompiler = function () {
-            return new KumaColumnCompiler(this, ...arguments);
+            return new PulseColumnCompiler(this, ...arguments);
         };
 
         const acquireConnectionTimeout = 120 * 1000;
@@ -222,20 +222,20 @@ class Database {
 
         let config = {};
 
-        let parsedMaxPoolConnections = parseInt(process.env.UPTIME_KUMA_DB_POOL_MAX_CONNECTIONS);
+        let parsedMaxPoolConnections = parseInt(process.env.UPTIME_PULSE_DB_POOL_MAX_CONNECTIONS);
 
-        if (!process.env.UPTIME_KUMA_DB_POOL_MAX_CONNECTIONS) {
+        if (!process.env.UPTIME_PULSE_DB_POOL_MAX_CONNECTIONS) {
             parsedMaxPoolConnections = 10;
         } else if (Number.isNaN(parsedMaxPoolConnections)) {
             log.warn(
                 "db",
-                "Max database connections defaulted to 10 because UPTIME_KUMA_DB_POOL_MAX_CONNECTIONS was invalid."
+                "Max database connections defaulted to 10 because UPTIME_PULSE_DB_POOL_MAX_CONNECTIONS was invalid."
             );
             parsedMaxPoolConnections = 10;
         } else if (parsedMaxPoolConnections < 1) {
             log.warn(
                 "db",
-                "Max database connections defaulted to 10 because UPTIME_KUMA_DB_POOL_MAX_CONNECTIONS was less than 1."
+                "Max database connections defaulted to 10 because UPTIME_PULSE_DB_POOL_MAX_CONNECTIONS was less than 1."
             );
             parsedMaxPoolConnections = 10;
         } else if (parsedMaxPoolConnections > 100) {
@@ -272,7 +272,7 @@ class Database {
 
             // Default is still single connection.
             // Multiple connection could run into "SQLITE_BUSY: database is locked" error.
-            if (process.env.UPTIME_KUMA_SQLITE_SINGLE_CONNECTION !== "false") {
+            if (process.env.UPTIME_PULSE_SQLITE_SINGLE_CONNECTION !== "false") {
                 log.info("db", "Using single connection for SQLite");
                 poolConfig = {
                     min: 1,
@@ -314,7 +314,7 @@ class Database {
                     : {}),
             });
 
-            // Set to true, so for example "uptime.kuma", becomes `uptime.kuma`, not `uptime`.`kuma`
+            // Set to true, so for example "uptime.pulse", becomes `uptime.pulse`, not `uptime`.`pulse`
             // Doc: https://github.com/mysqljs/sqlstring?tab=readme-ov-file#escaping-query-identifiers
             const escapedDBName = SqlString.escapeId(dbConfig.dbName, true);
 
@@ -358,7 +358,7 @@ class Database {
                 connection: {
                     socketPath: embeddedMariaDB.socketPath,
                     user: embeddedMariaDB.username,
-                    database: "kuma",
+                    database: "pulse",
                     timezone: "Z",
                     typeCast: function (field, next) {
                         if (field.type === "DATETIME") {
@@ -466,7 +466,7 @@ class Database {
      * @returns {Promise<void>}
      */
     static async patch(port = undefined, hostname = undefined) {
-        // Still need to keep this for old versions of Uptime Kuma
+        // Still need to keep this for old versions of Uptime Pulse
         if (Database.dbConfig.type === "sqlite") {
             await this.patchSqlite();
         }
@@ -495,7 +495,7 @@ class Database {
             // Allow missing patch files for downgrade or testing pr.
             if (e.message.includes("the following files are missing:")) {
                 log.warn("db", e.message);
-                log.warn("db", "Database migration failed, you may be downgrading Uptime Kuma.");
+                log.warn("db", "Database migration failed, you may be downgrading Uptime Pulse.");
             } else {
                 log.error("db", "Database migration failed");
                 throw e;
@@ -546,10 +546,10 @@ class Database {
                 await Database.close();
 
                 log.error("db", ex);
-                log.error("db", "Start Uptime-Kuma failed due to issue patching the database");
+                log.error("db", "Start Uptime-Pulse failed due to issue patching the database");
                 log.error(
                     "db",
-                    "Please submit a bug report if you still encounter the problem after restart: https://github.com/louislam/uptime-kuma/issues"
+                    "Please submit a bug report if you still encounter the problem after restart: https://github.com/louislam/uptime-pulse/issues"
                 );
 
                 process.exit(1);
@@ -590,10 +590,10 @@ class Database {
             await Database.close();
 
             log.error("db", ex);
-            log.error("db", "Start Uptime-Kuma failed due to issue patching the database");
+            log.error("db", "Start Uptime-Pulse failed due to issue patching the database");
             log.error(
                 "db",
-                "Please submit the bug report if you still encounter the problem after restart: https://github.com/louislam/uptime-kuma/issues"
+                "Please submit the bug report if you still encounter the problem after restart: https://github.com/louislam/uptime-pulse/issues"
             );
 
             process.exit(1);

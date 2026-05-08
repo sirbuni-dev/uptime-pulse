@@ -1,7 +1,7 @@
 const { RateLimiter } = require("limiter");
 const { log } = require("../src/util");
 
-class KumaRateLimiter {
+class PulseRateLimiter {
     /**
      * @param {object} config Rate limiter configuration object
      */
@@ -47,21 +47,21 @@ class KumaRateLimiter {
     }
 }
 
-const loginRateLimiter = new KumaRateLimiter({
+const loginRateLimiter = new PulseRateLimiter({
     tokensPerInterval: 20,
     interval: "minute",
     fireImmediately: true,
     errorMessage: "Too frequently, try again later.",
 });
 
-const apiRateLimiter = new KumaRateLimiter({
+const apiRateLimiter = new PulseRateLimiter({
     tokensPerInterval: 60,
     interval: "minute",
     fireImmediately: true,
     errorMessage: "Too frequently, try again later.",
 });
 
-const twoFaRateLimiter = new KumaRateLimiter({
+const twoFaRateLimiter = new PulseRateLimiter({
     tokensPerInterval: 30,
     interval: "minute",
     fireImmediately: true,

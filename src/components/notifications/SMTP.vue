@@ -104,7 +104,7 @@
                 class="form-control"
                 required
                 autocomplete="false"
-                placeholder='"Uptime Kuma" &lt;example@kuma.pet&gt;'
+                placeholder='"Uptime Pulse" &lt;example@pulse.pet&gt;'
             />
             <div class="form-text"></div>
         </div>
@@ -117,7 +117,7 @@
                 type="text"
                 class="form-control"
                 autocomplete="false"
-                placeholder="example2@kuma.pet, example3@kuma.pet"
+                placeholder="example2@pulse.pet, example3@pulse.pet"
                 :required="!hasRecipient"
             />
         </div>

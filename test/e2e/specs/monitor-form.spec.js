@@ -53,7 +53,7 @@ test.describe("Monitor Form", () => {
 
         const friendlyName = "Example DNS NS";
         await page.getByTestId("friendly-name-input").fill(friendlyName);
-        await page.getByTestId("hostname-input").fill("kuma.pet");
+        await page.getByTestId("hostname-input").fill("pulse.pet");
 
         const resolveTypeSelect = page.getByTestId("resolve-type-select");
         await resolveTypeSelect.click();
@@ -86,7 +86,7 @@ test.describe("Monitor Form", () => {
 
         const friendlyName = "Example DNS NS";
         await page.getByTestId("friendly-name-input").fill(friendlyName);
-        await page.getByTestId("hostname-input").fill("kuma.pet");
+        await page.getByTestId("hostname-input").fill("pulse.pet");
 
         const resolveTypeSelect = page.getByTestId("resolve-type-select");
         await resolveTypeSelect.click();

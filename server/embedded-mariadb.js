@@ -197,7 +197,7 @@ class EmbeddedMariaDB {
     }
 
     /**
-     * Initialise the "kuma" database in mariadb if it does not exist
+     * Initialise the "pulse" database in mariadb if it does not exist
      * @returns {Promise<void>}
      */
     async initDBAfterStarted() {
@@ -206,7 +206,7 @@ class EmbeddedMariaDB {
             user: this.username,
         });
 
-        let result = await connection.execute("CREATE DATABASE IF NOT EXISTS `kuma`");
+        let result = await connection.execute("CREATE DATABASE IF NOT EXISTS `pulse`");
         log.debug("mariadb", "CREATE DATABASE: " + JSON.stringify(result));
 
         log.info("mariadb", "Embedded MariaDB is ready for connections");

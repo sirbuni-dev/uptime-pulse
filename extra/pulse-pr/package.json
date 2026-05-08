@@ -1,8 +1,8 @@
 {
-    "name": "kuma-pr",
+    "name": "pulse-pr",
     "version": "1.0.0",
     "type": "module",
     "bin": {
-        "kuma-pr": "./index.mjs"
+        "pulse-pr": "./index.mjs"
     }
 }

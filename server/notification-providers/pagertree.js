@@ -28,7 +28,7 @@ class PagerTree extends NotificationProvider {
             }
 
             if (heartbeatJSON.status === DOWN) {
-                const title = `Uptime Kuma Monitor "${monitorJSON.name}" is DOWN`;
+                const title = `Uptime Pulse Monitor "${monitorJSON.name}" is DOWN`;
                 return this.postNotification(notification, title, monitorJSON, heartbeatJSON);
             }
         } catch (error) {
@@ -71,7 +71,7 @@ class PagerTree extends NotificationProvider {
             headers: { "Content-Type": "application/json" },
             data: {
                 event_type: eventAction,
-                id: heartbeatJSON?.monitorID || "uptime-kuma",
+                id: heartbeatJSON?.monitorID || "uptime-pulse",
                 title: title,
                 urgency: notification.pagertreeUrgency,
                 heartbeat: heartbeatJSON,
@@ -81,7 +81,7 @@ class PagerTree extends NotificationProvider {
 
         const baseURL = await Settings.get("primaryBaseURL");
         if (baseURL && monitorJSON) {
-            options.client = "Uptime Kuma";
+            options.client = "Uptime Pulse";
             options.client_url = baseURL + getMonitorRelativeURL(monitorJSON.id);
         }
 

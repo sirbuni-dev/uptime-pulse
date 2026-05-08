@@ -89,7 +89,7 @@
                     </tbody>
                 </table>
 
-                <div class="d-flex justify-content-center kuma_pagination">
+                <div class="d-flex justify-content-center pulse_pagination">
                     <pagination
                         v-model="page"
                         :records="importantHeartBeatListLength"

@@ -12,7 +12,7 @@ const https = require("https");
 /**
  * Reads a configuration value from an environment variable or a Docker secrets file.
  * If both the direct env var and the _FILE variant are set, an error is thrown.
- * @param {string} envName The base name of the environment variable (e.g., "UPTIME_KUMA_DB_PASSWORD")
+ * @param {string} envName The base name of the environment variable (e.g., "UPTIME_PULSE_DB_PASSWORD")
  * @returns {string|undefined} The value from the env var, file contents (trimmed), or undefined if neither is set
  * @throws {Error} If both the direct env var and the _FILE variant are set
  */
@@ -37,7 +37,7 @@ function getEnvOrFile(envName) {
 
 /**
  *  A standalone express app that is used to setup a database
- *  It is used when db-config.json and kuma.db are not found or invalid
+ *  It is used when db-config.json and pulse.db are not found or invalid
  *  Once it is configured, it will shut down and start the main server
  */
 class SetupDatabase {
@@ -54,14 +54,14 @@ class SetupDatabase {
     runningSetup = false;
     /**
      * @inheritDoc
-     * @type {UptimeKumaServer}
+     * @type {UptimePulseServer}
      * @private
      */
     server;
 
     /**
      * @param  {object} args The arguments passed from the command line
-     * @param  {UptimeKumaServer} server the main server instance
+     * @param  {UptimePulseServer} server the main server instance
      */
     constructor(args, server) {
         this.server = server;
@@ -69,8 +69,8 @@ class SetupDatabase {
         // Priority: env > db-config.json
         // If env is provided, write it to db-config.json
         // If db-config.json is found, check if it is valid
-        // If db-config.json is not found or invalid, check if kuma.db is found
-        // If kuma.db is not found, show setup page
+        // If db-config.json is not found or invalid, check if pulse.db is found
+        // If pulse.db is not found, show setup page
 
         let dbConfig;
 
@@ -81,11 +81,11 @@ class SetupDatabase {
         } catch (e) {
             log.info("setup-database", "db-config.json is not found or invalid: " + e.message);
 
-            // Check if kuma.db is found (1.X.X users), generate db-config.json
-            if (fs.existsSync(path.join(Database.dataDir, "kuma.db"))) {
+            // Check if pulse.db is found (1.X.X users), generate db-config.json
+            if (fs.existsSync(path.join(Database.dataDir, "pulse.db"))) {
                 this.needSetup = false;
 
-                log.info("setup-database", "kuma.db is found, generate db-config.json");
+                log.info("setup-database", "pulse.db is found, generate db-config.json");
                 Database.writeDBConfig({
                     type: "sqlite",
                 });
@@ -95,18 +95,18 @@ class SetupDatabase {
             dbConfig = {};
         }
 
-        if (process.env.UPTIME_KUMA_DB_TYPE) {
+        if (process.env.UPTIME_PULSE_DB_TYPE) {
             this.needSetup = false;
-            log.info("setup-database", "UPTIME_KUMA_DB_TYPE is provided by env, try to override db-config.json");
-            dbConfig.type = process.env.UPTIME_KUMA_DB_TYPE;
-            dbConfig.hostname = process.env.UPTIME_KUMA_DB_HOSTNAME;
-            dbConfig.port = process.env.UPTIME_KUMA_DB_PORT;
-            dbConfig.dbName = process.env.UPTIME_KUMA_DB_NAME;
-            dbConfig.username = getEnvOrFile("UPTIME_KUMA_DB_USERNAME");
-            dbConfig.password = getEnvOrFile("UPTIME_KUMA_DB_PASSWORD");
-            dbConfig.socketPath = process.env.UPTIME_KUMA_DB_SOCKET?.trim();
-            dbConfig.ssl = getEnvOrFile("UPTIME_KUMA_DB_SSL")?.toLowerCase() === "true";
-            dbConfig.ca = getEnvOrFile("UPTIME_KUMA_DB_CA");
+            log.info("setup-database", "UPTIME_PULSE_DB_TYPE is provided by env, try to override db-config.json");
+            dbConfig.type = process.env.UPTIME_PULSE_DB_TYPE;
+            dbConfig.hostname = process.env.UPTIME_PULSE_DB_HOSTNAME;
+            dbConfig.port = process.env.UPTIME_PULSE_DB_PORT;
+            dbConfig.dbName = process.env.UPTIME_PULSE_DB_NAME;
+            dbConfig.username = getEnvOrFile("UPTIME_PULSE_DB_USERNAME");
+            dbConfig.password = getEnvOrFile("UPTIME_PULSE_DB_PASSWORD");
+            dbConfig.socketPath = process.env.UPTIME_PULSE_DB_SOCKET?.trim();
+            dbConfig.ssl = getEnvOrFile("UPTIME_PULSE_DB_SSL")?.toLowerCase() === "true";
+            dbConfig.ca = getEnvOrFile("UPTIME_PULSE_DB_CA");
             Database.writeDBConfig(dbConfig);
         }
     }
@@ -124,7 +124,7 @@ class SetupDatabase {
      * @returns {boolean} true if the embedded MariaDB is enabled
      */
     isEnabledEmbeddedMariaDB() {
-        return process.env.UPTIME_KUMA_ENABLE_EMBEDDED_MARIADB === "1";
+        return process.env.UPTIME_PULSE_ENABLE_EMBEDDED_MARIADB === "1";
     }
 
     /**
@@ -163,7 +163,7 @@ class SetupDatabase {
                     runningSetup: this.runningSetup,
                     needSetup: this.needSetup,
                     isEnabledEmbeddedMariaDB: this.isEnabledEmbeddedMariaDB(),
-                    isEnabledMariaDBSocket: process.env.UPTIME_KUMA_DB_SOCKET?.trim().length > 0,
+                    isEnabledMariaDBSocket: process.env.UPTIME_PULSE_DB_SOCKET?.trim().length > 0,
                 });
             });
 
@@ -207,8 +207,8 @@ class SetupDatabase {
                 // External MariaDB
                 if (dbConfig.type === "mariadb") {
                     // If socketPath is provided and not empty, validate it
-                    if (process.env.UPTIME_KUMA_DB_SOCKET?.trim().length > 0) {
-                        dbConfig.socketPath = process.env.UPTIME_KUMA_DB_SOCKET.trim();
+                    if (process.env.UPTIME_PULSE_DB_SOCKET?.trim().length > 0) {
+                        dbConfig.socketPath = process.env.UPTIME_PULSE_DB_SOCKET.trim();
                     } else {
                         // socketPath not provided, hostname and port are required
                         if (!dbConfig.hostname) {

@@ -54,7 +54,7 @@ class SMSIR extends NotificationProvider {
                         templateId: parseInt(notification.smsirTemplate),
                         parameters: [
                             {
-                                name: "uptkumaalert",
+                                name: "uptpulsealert",
                                 value: msg,
                             },
                         ],

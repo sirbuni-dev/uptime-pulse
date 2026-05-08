@@ -1,7 +1,7 @@
 const { BeanModel } = require("redbean-node/dist/bean-model");
 const { R } = require("redbean-node");
 const cheerio = require("cheerio");
-const { UptimeKumaServer } = require("../uptime-kuma-server");
+const { UptimePulseServer } = require("../uptime-pulse-server");
 const jsesc = require("jsesc");
 const analytics = require("../analytics/analytics");
 const { marked } = require("marked");
@@ -23,7 +23,7 @@ const {
 
 class StatusPage extends BeanModel {
     /**
-     * Like this: { "test-uptime.kuma.pet": "default" }
+     * Like this: { "test-uptime.pulse.pet": "default" }
      * @type {{}}
      */
     static domainMappingList = {};
@@ -43,7 +43,7 @@ class StatusPage extends BeanModel {
             response.type("application/rss+xml");
             response.send(await StatusPage.renderRSS(statusPage, feedUrl));
         } else {
-            response.status(404).send(UptimeKumaServer.getInstance().indexHTML);
+            response.status(404).send(UptimePulseServer.getInstance().indexHTML);
         }
     }
 
@@ -66,7 +66,7 @@ class StatusPage extends BeanModel {
         if (statusPage) {
             response.send(await StatusPage.renderHTML(indexHTML, statusPage));
         } else {
-            response.status(404).send(UptimeKumaServer.getInstance().indexHTML);
+            response.status(404).send(UptimePulseServer.getInstance().indexHTML);
         }
     }
 
@@ -80,7 +80,7 @@ class StatusPage extends BeanModel {
         const { heartbeats, statusDescription } = await StatusPage.getRSSPageData(statusPage);
 
         // Use custom RSS title if set, otherwise fall back to status page title
-        let feedTitle = "Uptime Kuma RSS Feed";
+        let feedTitle = "Uptime Pulse RSS Feed";
         if (statusPage.rss_title) {
             feedTitle = statusPage.rss_title;
         } else if (statusPage.title) {
@@ -181,7 +181,7 @@ class StatusPage extends BeanModel {
         head.append(ogType);
 
         // Preload data
-        // Add jsesc, fix https://github.com/louislam/uptime-kuma/issues/2186
+        // Add jsesc, fix https://github.com/louislam/uptime-pulse/issues/2186
         const escapedJSONObject = jsesc(await StatusPage.getStatusPageData(statusPage), {
             isScriptContext: true,
         });
@@ -341,7 +341,7 @@ class StatusPage extends BeanModel {
 
     /**
      * Loads domain mapping from DB
-     * Return object like this: { "test-uptime.kuma.pet": "default" }
+     * Return object like this: { "test-uptime.pulse.pet": "default" }
      * @returns {Promise<void>}
      */
     static async loadDomainMappingList() {
@@ -569,7 +569,7 @@ class StatusPage extends BeanModel {
             );
 
             for (const maintenanceID of maintenanceIDList) {
-                let maintenance = UptimeKumaServer.getInstance().getMaintenance(maintenanceID);
+                let maintenance = UptimePulseServer.getInstance().getMaintenance(maintenanceID);
                 if (maintenance && (await maintenance.isUnderMaintenance())) {
                     publicMaintenanceList.push(await maintenance.toPublicJSON());
                 }

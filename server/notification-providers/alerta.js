@@ -22,11 +22,11 @@ class Alerta extends NotificationProvider {
                 environment: notification.alertaEnvironment,
                 severity: "critical",
                 correlate: [],
-                service: ["UptimeKuma"],
+                service: ["UptimePulse"],
                 value: "Timeout",
-                tags: ["uptimekuma"],
+                tags: ["uptimepulse"],
                 attributes: {},
-                origin: "uptimekuma",
+                origin: "uptimepulse",
                 type: "exceptionAlert",
             };
 
@@ -37,7 +37,7 @@ class Alerta extends NotificationProvider {
                     {
                         event: "msg",
                         text: msg,
-                        group: "uptimekuma-msg",
+                        group: "uptimepulse-msg",
                         resource: "Message",
                     },
                     data
@@ -49,7 +49,7 @@ class Alerta extends NotificationProvider {
                     {
                         correlate: ["service_up", "service_down"],
                         event: monitorJSON["type"],
-                        group: "uptimekuma-" + monitorJSON["type"],
+                        group: "uptimepulse-" + monitorJSON["type"],
                         resource: monitorJSON["name"],
                     },
                     data

@@ -66,9 +66,9 @@ describe("Database Migration", () => {
             const mariadbContainer = await new GenericContainer("mariadb:12")
                 .withEnvironment({
                     MYSQL_ROOT_PASSWORD: "root",
-                    MYSQL_DATABASE: "kuma_test",
-                    MYSQL_USER: "kuma",
-                    MYSQL_PASSWORD: "kuma",
+                    MYSQL_DATABASE: "pulse_test",
+                    MYSQL_USER: "pulse",
+                    MYSQL_PASSWORD: "pulse",
                 })
                 .withExposedPorts(3306)
                 .withWaitStrategy(Wait.forLogMessage("ready for connections", 2))
@@ -84,9 +84,9 @@ describe("Database Migration", () => {
                 connection: {
                     host: mariadbContainer.getHost(),
                     port: mariadbContainer.getMappedPort(3306),
-                    user: "kuma",
-                    password: "kuma",
-                    database: "kuma_test",
+                    user: "pulse",
+                    password: "pulse",
+                    database: "pulse_test",
                     connectTimeout: 60000,
                 },
                 pool: {

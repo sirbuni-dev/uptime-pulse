@@ -31,8 +31,8 @@
             required
         />
         <i18n-t tag="div" class="form-text" keypath="wayToGetClickSMSIRTemplateID">
-            <template #uptkumaalert>
-                <code>#uptkumaalert#</code>
+            <template #uptpulsealert>
+                <code>#uptpulsealert#</code>
             </template>
             <template #here>
                 <a href="https://app.sms.ir/fast-send/template" target="_blank">{{ $t("here") }}</a>
