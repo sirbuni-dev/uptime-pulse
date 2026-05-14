@@ -1,16 +1,17 @@
-ARG BASE_IMAGE=louislam/uptime-pulse:base2
+ARG BASE_IMAGE=louislam/uptime-kuma:base2
+ARG BUILDER_IMAGE=louislam/uptime-kuma:builder-go
 
 ############################################
 # Build in Golang
 # Run npm run build-healthcheck-armv7 in the host first, otherwise it will be super slow where it is building the armv7 healthcheck
 # Check file: builder-go.dockerfile
 ############################################
-FROM louislam/uptime-pulse:builder-go AS build_healthcheck
+FROM $BUILDER_IMAGE AS build_healthcheck
 
 ############################################
 # Build in Node.js
 ############################################
-FROM louislam/uptime-pulse:base2 AS build
+FROM $BASE_IMAGE AS build
 USER node
 WORKDIR /app
 
@@ -18,8 +19,9 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 COPY --chown=node:node .npmrc .npmrc
 COPY --chown=node:node package.json package.json
 COPY --chown=node:node package-lock.json package-lock.json
-RUN npm ci --omit=dev
+RUN npm ci
 COPY . .
+RUN npm run build
 COPY --chown=node:node --from=build_healthcheck /app/extra/healthcheck /app/extra/healthcheck
 RUN mkdir ./data
 
@@ -59,7 +61,7 @@ USER node
 ############################################
 # Build an image for testing pr
 ############################################
-FROM louislam/uptime-pulse:base2 AS pr-test2
+FROM $BASE_IMAGE AS pr-test2
 WORKDIR /app
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 
@@ -92,7 +94,7 @@ CMD ["npm", "run", "start-pr-test"]
 ############################################
 # Upload the artifact to Github
 ############################################
-FROM louislam/uptime-pulse:base2 AS upload-artifact
+FROM $BASE_IMAGE AS upload-artifact
 WORKDIR /
 RUN apt update && \
     apt --yes install curl file

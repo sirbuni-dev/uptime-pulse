@@ -137,6 +137,18 @@ class Database {
         Database.dataDir = process.env.DATA_DIR || args["data-dir"] || "./data/";
 
         Database.sqlitePath = path.join(Database.dataDir, "pulse.db");
+
+        // Migration: rename old kuma.db to pulse.db
+        const oldSqlitePath = path.join(Database.dataDir, "kuma.db");
+        if (fs.existsSync(oldSqlitePath) && !fs.existsSync(Database.sqlitePath)) {
+            fs.renameSync(oldSqlitePath, Database.sqlitePath);
+            for (const ext of ["-wal", "-shm"]) {
+                if (fs.existsSync(oldSqlitePath + ext)) {
+                    fs.renameSync(oldSqlitePath + ext, Database.sqlitePath + ext);
+                }
+            }
+        }
+
         if (!fs.existsSync(Database.dataDir)) {
             fs.mkdirSync(Database.dataDir, { recursive: true });
         }
