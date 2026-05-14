@@ -8,10 +8,14 @@
       @mousemove="onMouseMove"
       @mouseleave="onMouseLeave"
     />
+    <div class="hb-timeline">
+      <span class="hb-label-now">now</span>
+    </div>
     <div v-if="tooltip.visible" class="hb-tooltip" :style="tooltipStyle">
-      <div>{{ tooltip.time }}</div>
+      <div class="hb-tooltip-status" :class="tooltip.statusClass">{{ tooltip.statusLabel }}</div>
+      <div class="hb-tooltip-time">{{ tooltip.time }}</div>
       <div v-if="tooltip.msg" class="hb-tooltip-msg">{{ tooltip.msg }}</div>
-      <div>{{ tooltip.ping !== null ? tooltip.ping + 'ms' : '' }}</div>
+      <div v-if="tooltip.ping !== null">{{ tooltip.ping }}ms</div>
     </div>
   </div>
 </template>
@@ -32,7 +36,9 @@ const wrap       = ref<HTMLDivElement | null>(null)
 const canvas     = ref<HTMLCanvasElement | null>(null)
 const maxBeats   = ref(40)
 const hoveredIdx = ref(-1)
-const tooltip    = ref({ visible: false, time: '', msg: '', ping: null as number | null, x: 0 })
+const TIMELINE_H = 18  // height of .hb-timeline row in px
+
+const tooltip    = ref({ visible: false, statusLabel: '', statusClass: '', time: '', msg: '', ping: null as number | null, clientX: 0, clientY: 0 })
 
 const visibleBeats = computed(() => {
   const n     = maxBeats.value
@@ -45,8 +51,8 @@ const canvasWidth  = computed(() => visibleBeats.value.length * (BEAT_W + BEAT_P
 const canvasHeight = computed(() => BEAT_H * HOVER_SCALE)
 
 const tooltipStyle = computed(() => ({
-  left:      `${tooltip.value.x}px`,
-  top:       `${canvasHeight.value + 6}px`,
+  left:      `${tooltip.value.clientX}px`,
+  top:       `${tooltip.value.clientY}px`,
   transform: 'translateX(-50%)',
 }))
 
@@ -109,12 +115,17 @@ function onMouseMove(e: MouseEvent) {
     const beat = visibleBeats.value[idx]
     hoveredIdx.value = idx
     if (beat) {
+      const statusLabel = beat.status === UP ? 'UP' : beat.status === DOWN ? 'DOWN' : 'PENDING'
+      const statusClass = beat.status === UP ? 'status-up' : beat.status === DOWN ? 'status-down' : 'status-pending'
       tooltip.value = {
         visible: true,
+        statusLabel,
+        statusClass,
         time:    beat.checkedAt,
         msg:     beat.msg ?? '',
         ping:    beat.ping,
-        x:       idx * full + full / 2,
+        clientX: e.clientX,
+        clientY: rect.bottom + TIMELINE_H + 6,
       }
     } else {
       tooltip.value.visible = false
@@ -143,7 +154,8 @@ onUnmounted(() => window.removeEventListener('resize', resize))
 .hb-wrap {
   position: relative;
   width: 100%;
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 .hb-canvas {
@@ -151,17 +163,60 @@ onUnmounted(() => window.removeEventListener('resize', resize))
   cursor: pointer;
 }
 
-.hb-tooltip {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 11px;
+.hb-timeline {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 3px;
   pointer-events: none;
-  white-space: nowrap;
-  z-index: 10;
 }
 
-.hb-tooltip-msg { color: #f8a306; }
+.hb-label-now {
+  font-size: 10px;
+  color: var(--text4);
+  line-height: 1;
+}
+
+.hb-tooltip {
+  position: fixed;
+  background: #1a2232;
+  color: #dde3eb;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 9999;
+  text-align: center;
+  line-height: 1.6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-bottom: 13px solid #1a2232;
+  }
+}
+
+.hb-tooltip-status {
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 2px;
+
+  &.status-up      { color: #5cdd8b; }
+  &.status-down    { color: #dc3545; }
+  &.status-pending { color: #f8a306; }
+}
+
+.hb-tooltip-time {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 10px;
+  font-family: monospace;
+}
+
+.hb-tooltip-msg { color: rgba(255, 255, 255, 0.85); }
 </style>

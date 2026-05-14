@@ -258,7 +258,7 @@ async function confirmDelete() {
 @use '../assets/vars' as *;
 
 .monitor-detail {
-  color: $dark-font-color;
+  color: var(--text);
 }
 
 // Header
@@ -272,7 +272,7 @@ async function confirmDelete() {
 }
 
 .monitor-detail__title {
-  h1 { margin: 0 0 4px; font-size: 22px; color: #e6edf3; font-weight: 700; }
+  h1 { margin: 0 0 4px; font-size: 22px; color: var(--heading); font-weight: 700; }
 }
 
 .monitor-detail__url {
@@ -280,7 +280,7 @@ async function confirmDelete() {
   align-items: center;
   gap: 4px;
   font-size: 12px;
-  color: #8b949e;
+  color: var(--text2);
   &:hover { color: $primary; }
 }
 
@@ -297,14 +297,14 @@ async function confirmDelete() {
   gap: 5px;
   padding: 5px 12px;
   border-radius: 7px;
-  border: 1px solid $dark-border-color;
+  border: 1px solid var(--border);
   background: none;
-  color: #8b949e;
+  color: var(--text2);
   font-size: 12px;
   font-weight: 500;
   transition: all 0.15s;
 
-  &:hover { border-color: #8b949e; color: #c9d1d9; }
+  &:hover { border-color: var(--text2); color: var(--text); }
 
   &--success {
     border-color: rgba(92,221,139,0.4);
@@ -333,7 +333,7 @@ async function confirmDelete() {
 .hb-meta {
   margin-top: 6px;
   font-size: 11px;
-  color: #4b5563;
+  color: var(--text4);
 }
 
 .hb-meta__status {
@@ -347,8 +347,8 @@ async function confirmDelete() {
   display: flex;
   gap: 1px;
   margin-bottom: 24px;
-  background: $dark-border-color;
-  border: 1px solid $dark-border-color;
+  background: var(--border);
+  border: 1px solid var(--border);
   border-radius: 10px;
   overflow: hidden;
 }
@@ -356,7 +356,7 @@ async function confirmDelete() {
 .stat-box {
   flex: 1;
   padding: 14px 16px;
-  background: $dark-header-bg;
+  background: var(--bg-surface);
   min-width: 0;
 
   &:first-child { border-radius: 9px 0 0 9px; }
@@ -365,19 +365,19 @@ async function confirmDelete() {
 
 .stat-box__label {
   font-size: 11px;
-  color: #6b7280;
+  color: var(--text3);
   margin-bottom: 6px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  em { font-style: normal; display: block; font-size: 10px; color: #4b5563; }
+  em { font-style: normal; display: block; font-size: 10px; color: var(--text4); }
 }
 
 .stat-box__value {
   font-size: 20px;
   font-weight: 700;
-  color: #e6edf3;
+  color: var(--heading);
 
   &.uptime { color: $primary; }
 }
@@ -397,7 +397,7 @@ async function confirmDelete() {
     margin: 0;
     font-size: 12px;
     font-weight: 600;
-    color: #6b7280;
+    color: var(--text3);
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
@@ -409,13 +409,13 @@ async function confirmDelete() {
   gap: 4px;
   padding: 3px 10px;
   border-radius: 6px;
-  border: 1px solid $dark-border-color;
+  border: 1px solid var(--border);
   background: none;
-  color: #6b7280;
+  color: var(--text3);
   font-size: 11px;
   transition: all 0.15s;
 
-  &:hover { border-color: #8b949e; color: #c9d1d9; }
+  &:hover { border-color: var(--text2); color: var(--text); }
 
   &--active {
     border-color: rgba(92,221,139,0.4);
@@ -433,15 +433,15 @@ async function confirmDelete() {
 
 .page-size-label {
   font-size: 11px;
-  color: #6b7280;
+  color: var(--text3);
   display: flex;
   align-items: center;
   gap: 5px;
 
   select {
-    background: $dark-bg2;
-    border: 1px solid $dark-border-color;
-    color: #c9d1d9;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
     border-radius: 5px;
     padding: 2px 4px;
     font-size: 11px;
@@ -451,21 +451,21 @@ async function confirmDelete() {
 
 .page-info {
   font-size: 11px;
-  color: #6b7280;
+  color: var(--text3);
   white-space: nowrap;
 }
 
 .btn-page {
   background: none;
-  border: 1px solid $dark-border-color;
-  color: #8b949e;
+  border: 1px solid var(--border);
+  color: var(--text2);
   border-radius: 5px;
   padding: 2px 5px;
   display: flex;
   align-items: center;
   transition: all 0.15s;
 
-  &:hover:not(:disabled) { border-color: #8b949e; color: #c9d1d9; }
+  &:hover:not(:disabled) { border-color: var(--text2); color: var(--text); }
   &:disabled { opacity: 0.3; cursor: not-allowed; }
 }
 
@@ -478,24 +478,24 @@ async function confirmDelete() {
   th {
     text-align: left;
     padding: 6px 10px;
-    color: #6b7280;
+    color: var(--text3);
     font-weight: 600;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    border-bottom: 1px solid $dark-border-color;
+    border-bottom: 1px solid var(--border);
   }
 
   td {
     padding: 7px 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    color: #c9d1d9;
+    border-bottom: 1px solid var(--row-sep);
+    color: var(--text);
     vertical-align: middle;
   }
 
-  .td-time { color: #8b949e; font-family: monospace; font-size: 11px; }
-  .td-msg  { color: #8b949e; font-size: 11px; }
-  .td-empty { text-align: center; padding: 20px; color: #4b5563; }
+  .td-time { color: var(--text2); font-family: monospace; font-size: 11px; }
+  .td-msg  { color: var(--text2); font-size: 11px; }
+  .td-empty { text-align: center; padding: 20px; color: var(--text4); }
 
   .row--down td { background: rgba(220,53,69,0.04); }
 }

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { invoke } from '@tauri-apps/api/core'
 import { listen } from '@tauri-apps/api/event'
+import { useToastStore } from './toasts'
 
 export const DOWN    = 0
 export const UP      = 1
@@ -134,11 +135,23 @@ export const useMonitorStore = defineStore('monitors', {
     },
 
     handleNewHeartbeat(event: Omit<Heartbeat, 'id'> & { monitorId: number }) {
-      const monitorId = event.monitorId
+      const monitorId  = event.monitorId
+      const prevStatus = this.heartbeats[monitorId]?.[0]?.status
+
       if (!this.heartbeats[monitorId]) this.heartbeats[monitorId] = []
       const beat: Heartbeat = { id: Date.now(), ...event }
       this.heartbeats[monitorId] = [beat, ...this.heartbeats[monitorId]].slice(0, 90)
       this.fetchUptimePeriods(monitorId)
+
+      const monitor = this.monitors.find(m => m.id === monitorId)
+      const name    = monitor?.name ?? `Monitor #${monitorId}`
+      const toasts  = useToastStore()
+
+      if (event.status === DOWN) {
+        toasts.push('down', `[${name}] [DOWN] ${event.msg ?? 'Connection failed'}`)
+      } else if (event.status === UP && prevStatus === DOWN) {
+        toasts.push('up', `[${name}] [UP] ${event.msg ?? '200 - OK'}`)
+      }
     },
 
     async startAllMonitors() {

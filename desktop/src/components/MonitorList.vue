@@ -70,7 +70,7 @@ const filtered = computed(() => store.filteredMonitors(searchQuery.value))
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: $dark-bg2;
+  background: var(--bg2);
   overflow: hidden;
 }
 
@@ -79,7 +79,7 @@ const filtered = computed(() => store.filteredMonitors(searchQuery.value))
   align-items: center;
   gap: 8px;
   padding: 14px 12px 12px;
-  border-bottom: 1px solid $dark-border-color;
+  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
 
@@ -92,7 +92,7 @@ const filtered = computed(() => store.filteredMonitors(searchQuery.value))
 .app-title {
   font-weight: 700;
   font-size: 14px;
-  color: #e6edf3;
+  color: var(--heading);
   flex: 1;
 }
 
@@ -104,14 +104,14 @@ const filtered = computed(() => store.filteredMonitors(searchQuery.value))
 .btn-icon-only {
   background: none;
   border: none;
-  color: #6b7280;
+  color: var(--text3);
   padding: 4px;
   border-radius: 6px;
   display: flex;
   align-items: center;
   transition: color 0.15s, background 0.15s;
 
-  &:hover { color: #c9d1d9; background: rgba(255,255,255,0.06); }
+  &:hover { color: var(--text); background: var(--input-bg); }
 }
 
 .monitor-list__toolbar {
@@ -148,22 +148,22 @@ const filtered = computed(() => store.filteredMonitors(searchQuery.value))
   left: 22px;
   top: 50%;
   transform: translateY(-60%);
-  color: #6b7280;
+  color: var(--text3);
   pointer-events: none;
 }
 
 .search-input {
   width: 100%;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid $dark-border-color;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 6px 10px 6px 30px;
   font-size: 12px;
-  color: #c9d1d9;
+  color: var(--text);
   outline: none;
   transition: border-color 0.15s;
 
-  &::placeholder  { color: #4b5563; }
+  &::placeholder  { color: var(--text4); }
   &:focus         { border-color: rgba(92,221,139,0.4); }
 
   &::-webkit-search-cancel-button { display: none; }
@@ -171,7 +171,7 @@ const filtered = computed(() => store.filteredMonitors(searchQuery.value))
 
 .monitor-list__empty {
   padding: 20px 12px;
-  color: #4b5563;
+  color: var(--text4);
   font-size: 12px;
   text-align: center;
 }

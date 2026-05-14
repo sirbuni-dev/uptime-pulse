@@ -85,13 +85,13 @@ function submit() { emit('submit', { ...form }) }
 }
 
 .modal-box {
-  background: $dark-header-bg;
-  border: 1px solid $dark-border-color;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 24px 28px 28px;
   width: 400px;
   max-width: 95vw;
-  color: $dark-font-color;
+  color: var(--text);
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
@@ -101,17 +101,17 @@ function submit() { emit('submit', { ...form }) }
   justify-content: space-between;
   margin-bottom: 20px;
 
-  h2 { margin: 0; font-size: 17px; color: #e6edf3; }
+  h2 { margin: 0; font-size: 17px; color: var(--heading); }
 }
 
 .btn-close {
   background: none;
   border: none;
-  color: #6b7280;
+  color: var(--text3);
   padding: 4px;
   border-radius: 6px;
   display: flex;
-  &:hover { color: #c9d1d9; }
+  &:hover { color: var(--text); }
 }
 
 label {
@@ -120,19 +120,19 @@ label {
   gap: 5px;
   margin-bottom: 14px;
   font-size: 12px;
-  color: #8b949e;
+  color: var(--text2);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 input {
-  background: $dark-bg2;
-  border: 1px solid $dark-border-color;
+  background: var(--bg2);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 14px;
-  color: #e6edf3;
+  color: var(--heading);
   outline: none;
   transition: border-color 0.15s;
 
@@ -149,11 +149,11 @@ input {
 .btn-cancel {
   padding: 8px 20px;
   border-radius: 8px;
-  border: 1px solid $dark-border-color;
+  border: 1px solid var(--border);
   background: none;
-  color: #8b949e;
+  color: var(--text2);
   font-size: 14px;
-  &:hover { border-color: #8b949e; color: #c9d1d9; }
+  &:hover { border-color: var(--text2); color: var(--text); }
 }
 
 .btn-submit {

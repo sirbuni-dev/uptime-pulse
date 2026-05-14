@@ -61,10 +61,10 @@ const miniBeats = computed(() => {
   gap: 8px;
   padding: 8px 12px;
   cursor: pointer;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid var(--row-sep);
   transition: background 0.15s;
 
-  &:hover        { background: rgba(255,255,255,0.05); }
+  &:hover        { background: var(--hover); }
   &--selected    { background: rgba(92,221,139,0.08); border-left: 3px solid $primary; padding-left: 9px; }
   &--paused      { opacity: 0.5; }
 }
@@ -83,14 +83,14 @@ const miniBeats = computed(() => {
 .monitor-item__name {
   font-size: 13px;
   font-weight: 500;
-  color: #c9d1d9;
+  color: var(--text);
   flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  .monitor-item--selected & { color: #e6edf3; }
+  .monitor-item--selected & { color: var(--heading); }
 }
 
 .mini-beats {
@@ -109,6 +109,6 @@ const miniBeats = computed(() => {
   &--up      { background: $primary; }
   &--down    { background: $danger; }
   &--pending { background: $warning; }
-  &--empty   { background: rgba(255,255,255,0.1); }
+  &--empty   { background: var(--beat-empty); }
 }
 </style>
