@@ -11,7 +11,8 @@
     <main class="dashboard__main">
       <MonitorDetail v-if="selectedMonitor" :monitor-id="selectedId!" />
       <div v-else class="dashboard__empty">
-        Select a monitor from the list, or add a new one.
+        <Activity :size="40" class="empty-icon" />
+        <p>Select a monitor from the list, or add a new one.</p>
       </div>
     </main>
 
@@ -25,6 +26,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { Activity } from 'lucide-vue-next'
 import { useMonitorStore } from '../stores/monitors'
 import MonitorList from '../components/MonitorList.vue'
 import MonitorDetail from './MonitorDetail.vue'
@@ -46,30 +48,43 @@ async function onCreate(payload: { name: string; url: string; interval: number; 
 </script>
 
 <style lang="scss" scoped>
+@use '../assets/vars' as *;
+
 .dashboard {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  background: $dark-bg;
 }
 
 .dashboard__sidebar {
-  width: 300px;
+  width: 280px;
   min-width: 220px;
   flex-shrink: 0;
   height: 100%;
   overflow: hidden;
+  border-right: 1px solid $dark-border-color;
 }
 
 .dashboard__main {
   flex: 1;
-  padding: 20px 24px;
+  padding: 24px 28px;
   overflow-y: auto;
+  background: $dark-bg;
+  color: $dark-font-color;
 }
 
 .dashboard__empty {
-  margin-top: 80px;
-  text-align: center;
-  color: #aaa;
-  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  color: #4b5563;
+
+  p { margin: 0; font-size: 14px; }
 }
+
+.empty-icon { opacity: 0.3; }
 </style>

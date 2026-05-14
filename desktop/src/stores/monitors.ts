@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { invoke } from '@tauri-apps/api/core'
 import { listen } from '@tauri-apps/api/event'
 
-export const DOWN = 0
-export const UP   = 1
+export const DOWN    = 0
+export const UP      = 1
 export const PENDING = 2
 
 export interface Monitor {
@@ -27,6 +27,12 @@ export interface Heartbeat {
   checkedAt: string
 }
 
+export interface UptimePeriods {
+  h24: number
+  d30: number
+  y1:  number
+}
+
 export interface CreateMonitorPayload {
   name:      string
   url:       string
@@ -45,16 +51,24 @@ export interface UpdateMonitorPayload {
 
 export const useMonitorStore = defineStore('monitors', {
   state: () => ({
-    monitors:  [] as Monitor[],
-    heartbeats: {} as Record<number, Heartbeat[]>,
-    uptime:    {} as Record<number, number>,
-    loading:   false,
+    monitors:      [] as Monitor[],
+    heartbeats:    {} as Record<number, Heartbeat[]>,
+    uptime:        {} as Record<number, number>,
+    uptimePeriods: {} as Record<number, UptimePeriods>,
+    loading:       false,
   }),
 
   getters: {
     currentStatus: (state) => (monitorId: number): number => {
       const beats = state.heartbeats[monitorId]
       return beats && beats.length > 0 ? beats[0].status : PENDING
+    },
+    filteredMonitors: (state) => (query: string): Monitor[] => {
+      if (!query.trim()) return state.monitors
+      const q = query.toLowerCase()
+      return state.monitors.filter(m =>
+        m.name.toLowerCase().includes(q) || m.url.toLowerCase().includes(q)
+      )
     },
   },
 
@@ -64,7 +78,7 @@ export const useMonitorStore = defineStore('monitors', {
       try {
         this.monitors = await invoke<Monitor[]>('list_monitors')
         await Promise.all(this.monitors.map(m => this.fetchHeartbeats(m.id)))
-        await Promise.all(this.monitors.map(m => this.fetchUptime(m.id)))
+        await Promise.all(this.monitors.map(m => this.fetchUptimePeriods(m.id)))
       } finally {
         this.loading = false
       }
@@ -78,11 +92,22 @@ export const useMonitorStore = defineStore('monitors', {
       this.uptime[monitorId] = await invoke<number>('get_uptime_percentage', { monitorId, hours })
     },
 
+    async fetchUptimePeriods(monitorId: number) {
+      const [h24, d30, y1] = await Promise.all([
+        invoke<number>('get_uptime_percentage', { monitorId, hours: 24 }),
+        invoke<number>('get_uptime_percentage', { monitorId, hours: 720 }),
+        invoke<number>('get_uptime_percentage', { monitorId, hours: 8760 }),
+      ])
+      this.uptime[monitorId]        = h24
+      this.uptimePeriods[monitorId] = { h24, d30, y1 }
+    },
+
     async createMonitor(payload: CreateMonitorPayload) {
       const m = await invoke<Monitor>('create_monitor', { payload })
       this.monitors.push(m)
-      this.heartbeats[m.id] = []
-      this.uptime[m.id] = 0
+      this.heartbeats[m.id]    = []
+      this.uptime[m.id]        = 0
+      this.uptimePeriods[m.id] = { h24: 0, d30: 0, y1: 0 }
       return m
     },
 
@@ -93,11 +118,19 @@ export const useMonitorStore = defineStore('monitors', {
       return m
     },
 
+    async toggleActive(id: number, active: boolean) {
+      const m = await invoke<Monitor>('toggle_active', { id, active })
+      const idx = this.monitors.findIndex(x => x.id === m.id)
+      if (idx !== -1) this.monitors[idx] = m
+      return m
+    },
+
     async deleteMonitor(id: number) {
       await invoke('delete_monitor', { id })
       this.monitors = this.monitors.filter(m => m.id !== id)
       delete this.heartbeats[id]
       delete this.uptime[id]
+      delete this.uptimePeriods[id]
     },
 
     handleNewHeartbeat(event: Omit<Heartbeat, 'id'> & { monitorId: number }) {
@@ -105,7 +138,7 @@ export const useMonitorStore = defineStore('monitors', {
       if (!this.heartbeats[monitorId]) this.heartbeats[monitorId] = []
       const beat: Heartbeat = { id: Date.now(), ...event }
       this.heartbeats[monitorId] = [beat, ...this.heartbeats[monitorId]].slice(0, 90)
-      this.fetchUptime(monitorId)
+      this.fetchUptimePeriods(monitorId)
     },
 
     async startAllMonitors() {

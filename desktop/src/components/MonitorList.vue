@@ -1,15 +1,43 @@
 <template>
   <div class="monitor-list">
+    <!-- Header -->
     <div class="monitor-list__header">
-      <span>Monitors ({{ store.monitors.length }})</span>
-      <button class="btn-add" @click="$emit('addMonitor')">+ Add</button>
+      <img src="/vite.svg" class="app-logo" alt="" />
+      <span class="app-title">Uptime Pulse</span>
+      <div class="header-actions">
+        <button class="btn-icon-only" :title="theme.dark ? 'Switch to light' : 'Switch to dark'" @click="theme.toggle()">
+          <Sun v-if="theme.dark" :size="16" />
+          <Moon v-else :size="16" />
+        </button>
+      </div>
     </div>
+
+    <!-- Add button -->
+    <div class="monitor-list__toolbar">
+      <button class="btn-add" @click="$emit('addMonitor')">
+        <Plus :size="14" />
+        Add New Monitor
+      </button>
+    </div>
+
+    <!-- Search -->
+    <div class="monitor-list__search">
+      <Search :size="13" class="search-icon" />
+      <input
+        v-model="searchQuery"
+        class="search-input"
+        placeholder="Search monitors…"
+        type="search"
+      />
+    </div>
+
+    <!-- List -->
     <div v-if="store.loading" class="monitor-list__empty">Loading…</div>
-    <div v-else-if="store.monitors.length === 0" class="monitor-list__empty">
-      No monitors yet. Add one to get started.
+    <div v-else-if="filtered.length === 0" class="monitor-list__empty">
+      {{ store.monitors.length === 0 ? 'No monitors yet.' : 'No results.' }}
     </div>
     <MonitorListItem
-      v-for="m in store.monitors"
+      v-for="m in filtered"
       :key="m.id"
       :monitor="m"
       :is-selected="m.id === selectedId"
@@ -19,13 +47,20 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
+import { Plus, Search, Sun, Moon } from 'lucide-vue-next'
 import { useMonitorStore } from '../stores/monitors'
+import { useThemeStore } from '../stores/theme'
 import MonitorListItem from './MonitorListItem.vue'
 
 defineProps<{ selectedId: number | null }>()
 defineEmits<{ select: [id: number]; addMonitor: [] }>()
 
-const store = useMonitorStore()
+const store       = useMonitorStore()
+const theme       = useThemeStore()
+const searchQuery = ref('')
+
+const filtered = computed(() => store.filteredMonitors(searchQuery.value))
 </script>
 
 <style lang="scss" scoped>
@@ -33,40 +68,111 @@ const store = useMonitorStore()
 
 .monitor-list {
   height: 100%;
-  overflow-y: auto;
-  border-right: 1px solid #eee;
-
-  .dark & { border-color: $dark-border-color; }
+  display: flex;
+  flex-direction: column;
+  background: $dark-bg2;
+  overflow: hidden;
 }
 
 .monitor-list__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 12px 14px;
-  font-weight: 700;
-  border-bottom: 1px solid #eee;
-  position: sticky;
-  top: 0;
-  background: #fff;
-
-  .dark & { background: $dark-bg; border-color: $dark-border-color; }
+  gap: 8px;
+  padding: 14px 12px 12px;
+  border-bottom: 1px solid $dark-border-color;
+  flex-shrink: 0;
 }
 
-.monitor-list__empty {
-  padding: 20px 14px;
-  color: $secondary-text;
-  font-size: 13px;
+.app-logo {
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
+}
+
+.app-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: #e6edf3;
+  flex: 1;
+}
+
+.header-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-icon-only {
+  background: none;
+  border: none;
+  color: #6b7280;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s, background 0.15s;
+
+  &:hover { color: #c9d1d9; background: rgba(255,255,255,0.06); }
+}
+
+.monitor-list__toolbar {
+  padding: 10px 12px 6px;
+  flex-shrink: 0;
 }
 
 .btn-add {
-  background: none;
-  border: 1px solid $primary;
-  color: $primary;
-  border-radius: 6px;
-  padding: 2px 10px;
-  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: $primary;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
   font-size: 13px;
-  &:hover { background: $primary; color: #000; }
+  font-weight: 600;
+  transition: background 0.15s;
+
+  &:hover { background: $highlight; }
+}
+
+.monitor-list__search {
+  position: relative;
+  padding: 0 12px 8px;
+  flex-shrink: 0;
+}
+
+.search-icon {
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-60%);
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid $dark-border-color;
+  border-radius: 8px;
+  padding: 6px 10px 6px 30px;
+  font-size: 12px;
+  color: #c9d1d9;
+  outline: none;
+  transition: border-color 0.15s;
+
+  &::placeholder  { color: #4b5563; }
+  &:focus         { border-color: rgba(92,221,139,0.4); }
+
+  &::-webkit-search-cancel-button { display: none; }
+}
+
+.monitor-list__empty {
+  padding: 20px 12px;
+  color: #4b5563;
+  font-size: 12px;
+  text-align: center;
 }
 </style>

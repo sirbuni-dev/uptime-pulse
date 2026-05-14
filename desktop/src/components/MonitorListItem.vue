@@ -1,31 +1,54 @@
 <template>
   <div
     class="monitor-item"
-    :class="{ 'monitor-item--active': isActive, 'monitor-item--selected': isSelected }"
+    :class="{
+      'monitor-item--selected': isSelected,
+      'monitor-item--paused':   !monitor.active,
+    }"
     @click="$emit('select', monitor.id)"
   >
-    <StatusBadge :status="currentStatus" />
+    <span class="status-dot" :class="dotClass" />
     <span class="monitor-item__name">{{ monitor.name }}</span>
-    <span class="monitor-item__url">{{ monitor.url }}</span>
-    <span class="monitor-item__uptime">{{ uptimeLabel }}</span>
+    <div class="mini-beats">
+      <span
+        v-for="(b, i) in miniBeats"
+        :key="i"
+        class="mini-beat"
+        :class="b"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Monitor } from '../stores/monitors'
-import { useMonitorStore } from '../stores/monitors'
-import StatusBadge from './StatusBadge.vue'
+import { useMonitorStore, DOWN, UP, PENDING } from '../stores/monitors'
 
 const props = defineProps<{ monitor: Monitor; isSelected: boolean }>()
 defineEmits<{ select: [id: number] }>()
 
 const store         = useMonitorStore()
 const currentStatus = computed(() => store.currentStatus(props.monitor.id))
-const isActive      = computed(() => props.monitor.active)
-const uptimeLabel   = computed(() => {
-  const u = store.uptime[props.monitor.id]
-  return u !== undefined ? u.toFixed(1) + '%' : '—'
+
+const dotClass = computed(() => ({
+  'dot--up':      currentStatus.value === UP,
+  'dot--down':    currentStatus.value === DOWN,
+  'dot--pending': currentStatus.value === PENDING,
+}))
+
+const miniBeats = computed(() => {
+  const beats = store.heartbeats[props.monitor.id] ?? []
+  const slots = 30
+  const result: string[] = []
+  for (let i = 0; i < slots; i++) {
+    const b = beats[slots - 1 - i]
+    if (!b)                   result.push('mini-beat--empty')
+    else if (b.status === UP) result.push('mini-beat--up')
+    else if (b.status === DOWN) result.push('mini-beat--down')
+    else                      result.push('mini-beat--pending')
+  }
+  return result
 })
 </script>
 
@@ -36,43 +59,56 @@ const uptimeLabel   = computed(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
-  transition: background $easing-out 0.15s;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.15s;
 
-  &:hover       { background: #f5f5f5; }
-  &--selected   { background: #eaf9f0; }
-  &:not(.monitor-item--active) { opacity: 0.5; }
+  &:hover        { background: rgba(255,255,255,0.05); }
+  &--selected    { background: rgba(92,221,139,0.08); border-left: 3px solid $primary; padding-left: 9px; }
+  &--paused      { opacity: 0.5; }
+}
 
-  .dark & {
-    border-color: $dark-border-color;
-    &:hover     { background: $dark-header-bg; }
-    &--selected { background: #0d2b1a; }
-  }
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.dot--up      { background: $primary; box-shadow: 0 0 6px rgba(92,221,139,0.6); }
+  &.dot--down    { background: $danger;  box-shadow: 0 0 6px rgba(220,53,69,0.6); }
+  &.dot--pending { background: $warning; }
 }
 
 .monitor-item__name {
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
+  color: #c9d1d9;
   flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  .monitor-item--selected & { color: #e6edf3; }
 }
 
-.monitor-item__url {
-  font-size: 11px;
-  color: $secondary-text;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.mini-beats {
+  display: flex;
+  gap: 1.5px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-.monitor-item__uptime {
-  font-size: 12px;
-  font-weight: 600;
-  min-width: 44px;
-  text-align: right;
+.mini-beat {
+  width: 4px;
+  height: 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+
+  &--up      { background: $primary; }
+  &--down    { background: $danger; }
+  &--pending { background: $warning; }
+  &--empty   { background: rgba(255,255,255,0.1); }
 }
 </style>

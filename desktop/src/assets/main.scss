@@ -10,21 +10,17 @@ html, body {
   font-size: 14px;
   background: #fff;
   color: #222;
+  transition: background 0.2s, color 0.2s;
 }
 
-.dark {
+html.dark, html.dark body {
   background: $dark-bg;
   color: $dark-font-color;
 }
 
 a { color: inherit; text-decoration: none; }
 
-.btn-primary {
-  background: $primary;
-  border-color: $primary;
-  color: #000;
-  &:hover { background: $highlight; border-color: $highlight; }
-}
+button { cursor: pointer; }
 
 .status-up      { color: $primary; }
 .status-down    { color: $danger; }
