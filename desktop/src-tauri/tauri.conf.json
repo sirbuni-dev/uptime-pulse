@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "desktop",
+  "productName": "Uptime Pulse",
   "version": "0.1.0",
   "identifier": "com.ellynet.uptimepulse.desktop",
   "build": {
@@ -10,11 +10,14 @@
     "frontendDist": "../dist"
   },
   "app": {
+    "withGlobalTauri": false,
     "windows": [
       {
-        "title": "desktop",
-        "width": 800,
-        "height": 600
+        "title": "Uptime Pulse",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600
       }
     ],
     "security": {

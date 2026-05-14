@@ -1,5 +1,5 @@
 {
-  "name": "desktop",
+  "name": "uptime-pulse-desktop",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -10,15 +10,18 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "vue": "^3.5.13",
     "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-opener": "^2"
+    "@tauri-apps/plugin-shell": "^2",
+    "pinia": "^2.2",
+    "vue": "^3.5",
+    "vue-router": "^4.4"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.1",
-    "typescript": "~5.6.2",
-    "vite": "^6.0.3",
-    "vue-tsc": "^2.1.10",
-    "@tauri-apps/cli": "^2"
+    "@tauri-apps/cli": "^2",
+    "@vitejs/plugin-vue": "^5",
+    "sass": "^1.70",
+    "typescript": "~5.6",
+    "vite": "^6",
+    "vue-tsc": "^2"
   }
 }

@@ -1,0 +1,31 @@
+@use "vars" as *;
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  background: #fff;
+  color: #222;
+}
+
+.dark {
+  background: $dark-bg;
+  color: $dark-font-color;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.btn-primary {
+  background: $primary;
+  border-color: $primary;
+  color: #000;
+  &:hover { background: $highlight; border-color: $highlight; }
+}
+
+.status-up      { color: $primary; }
+.status-down    { color: $danger; }
+.status-pending { color: $warning; }
