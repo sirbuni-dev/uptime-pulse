@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version number (e.g., 1.0.0)"
+        description: "Version number (e.g., 1.0.1)"
         required: true
         type: string
 
@@ -65,11 +65,23 @@ jobs:
             librsvg2-dev \
             patchelf
 
+      - name: Patch app version in tauri.conf.json
+        shell: bash
+        run: |
+          node -e "
+            const fs = require('fs');
+            const p = 'desktop/src-tauri/tauri.conf.json';
+            const c = JSON.parse(fs.readFileSync(p, 'utf8'));
+            c.version = '${{ inputs.version }}';
+            fs.writeFileSync(p, JSON.stringify(c, null, 2) + '\n');
+            console.log('Patched version to ${{ inputs.version }}');
+          "
+
       - name: Install frontend dependencies
         working-directory: desktop
         run: npm ci
 
-      - name: Build and publish to release
+      - name: Build and publish to GitHub release
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -80,13 +92,23 @@ jobs:
           releaseBody: |
             ## Uptime Pulse Desktop v${{ inputs.version }}
 
-            Download the installer for your platform below.
+            Native cross-platform uptime monitor — macOS, Windows, and Linux.
+            No server or Docker required; data is stored locally in SQLite.
 
-            | Platform | Artifact |
-            |----------|----------|
-            | macOS (Intel + Apple Silicon) | `.dmg` |
-            | Windows | `.msi` (recommended) · `.exe` (NSIS) |
-            | Linux | `.AppImage` (portable) · `.deb` (Debian/Ubuntu) |
+            ### Download
+
+            | Platform | Installer |
+            |----------|-----------|
+            | **macOS** (Intel + Apple Silicon) | `.dmg` |
+            | **Windows** | `.msi` (recommended) · `.exe` (NSIS) |
+            | **Linux** | `.AppImage` (portable) · `.deb` (Debian/Ubuntu) |
+
+            > **macOS note:** If Gatekeeper blocks the app, right-click → Open.
+            > The release is unsigned; a signing certificate will be added in a future version.
+
+            ---
+
+            Full release notes: [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md)
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
