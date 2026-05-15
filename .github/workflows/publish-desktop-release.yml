@@ -1,0 +1,27 @@
+name: Publish Desktop Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g., 1.0.1) — must match an existing draft release"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish draft → public
+
+    steps:
+      - name: Publish draft release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release edit "desktop-v${{ inputs.version }}" \
+            --draft=false \
+            --repo "${{ github.repository }}"
+          echo "Published: desktop-v${{ inputs.version }}"
