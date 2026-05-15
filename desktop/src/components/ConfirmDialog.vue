@@ -23,6 +23,7 @@ defineEmits<{ confirm: []; cancel: [] }>()
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:color';
 @use '../assets/vars' as *;
 
 .modal-overlay {
@@ -84,6 +85,6 @@ defineEmits<{ confirm: []; cancel: [] }>()
   color: #fff;
   font-size: 13px;
   font-weight: 600;
-  &:hover { background: darken(#dc3545, 8%); }
+  &:hover { background: color.adjust($danger, $lightness: -8%); }
 }
 </style>
