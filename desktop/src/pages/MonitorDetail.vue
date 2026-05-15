@@ -120,7 +120,7 @@
         <tbody>
           <tr v-for="b in paginatedBeats" :key="b.id" :class="rowClass(b.status)">
             <td><StatusBadge :status="b.status" /></td>
-            <td class="td-time">{{ b.checkedAt }}</td>
+            <td class="td-time">{{ formatDateTime(b.checkedAt) }}</td>
             <td>{{ b.ping != null ? b.ping.toFixed(0) + 'ms' : '—' }}</td>
             <td class="td-msg">{{ b.msg ?? '' }}</td>
           </tr>
@@ -144,27 +144,41 @@
       @close="showClone = false"
       @submit="onClone"
     />
+    <ConfirmDialog
+      :visible="showDeleteConfirm"
+      title="Delete Monitor"
+      :message="`Are you sure you want to delete &quot;${monitor?.name}&quot;? This action cannot be undone.`"
+      confirm-label="Delete"
+      @confirm="doDelete"
+      @cancel="showDeleteConfirm = false"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { formatDateTime } from '../utils/time'
 import {
   Pause, Play, Pencil, Copy, Trash2,
   ExternalLink, Activity, ChevronLeft, ChevronRight,
 } from 'lucide-vue-next'
-import { useMonitorStore, DOWN, UP, PENDING } from '../stores/monitors'
+import { useMonitorStore, DOWN, UP, PENDING, PAUSED } from '../stores/monitors'
+import { useToastStore } from '../stores/toasts'
 import HeartbeatBar from '../components/HeartbeatBar.vue'
 import PingChart from '../components/PingChart.vue'
 import StatusBadge from '../components/StatusBadge.vue'
 import MonitorFormModal from '../components/MonitorFormModal.vue'
+import ConfirmDialog from '../components/ConfirmDialog.vue'
 
 const props = defineProps<{ monitorId: number }>()
+const emit  = defineEmits<{ deleted: [] }>()
 const store = useMonitorStore()
+const toasts = useToastStore()
 
-const showEdit  = ref(false)
-const showClone = ref(false)
-const showChart = ref(true)
+const showEdit          = ref(false)
+const showClone         = ref(false)
+const showDeleteConfirm = ref(false)
+const showChart         = ref(true)
 const pageSize  = ref(10)
 const currentPage = ref(1)
 
@@ -182,8 +196,9 @@ const avgPing = computed(() => {
 })
 
 const statusLabel = computed(() => {
-  if (currentStatus.value === UP)      return 'Up'
-  if (currentStatus.value === DOWN)    return 'Down'
+  if (currentStatus.value === UP)     return 'Up'
+  if (currentStatus.value === DOWN)   return 'Down'
+  if (currentStatus.value === PAUSED) return 'Paused'
   return 'Pending'
 })
 
@@ -191,6 +206,7 @@ const statusClass = computed(() => ({
   'status-up':      currentStatus.value === UP,
   'status-down':    currentStatus.value === DOWN,
   'status-pending': currentStatus.value === PENDING,
+  'status-paused':  currentStatus.value === PAUSED,
 }))
 
 const totalPages = computed(() => Math.max(1, Math.ceil(beats.value.length / pageSize.value)))
@@ -246,10 +262,21 @@ async function onClone(payload: { name: string; url: string; interval: number; t
   showClone.value = false
 }
 
-async function confirmDelete() {
+function confirmDelete() {
   if (!monitor.value) return
-  if (confirm(`Delete "${monitor.value.name}"?`)) {
+  showDeleteConfirm.value = true
+}
+
+async function doDelete() {
+  if (!monitor.value) return
+  const name = monitor.value.name
+  showDeleteConfirm.value = false
+  try {
     await store.deleteMonitor(monitor.value.id)
+    toasts.push('info', `"${name}" was deleted.`)
+    emit('deleted')
+  } catch (err) {
+    toasts.push('error', `Failed to delete "${name}". Please try again.`)
   }
 }
 </script>
@@ -340,6 +367,7 @@ async function confirmDelete() {
   &.status-up      { color: $primary; }
   &.status-down    { color: $danger; }
   &.status-pending { color: $warning; }
+  &.status-paused  { color: #6b7280; }
 }
 
 // Stats

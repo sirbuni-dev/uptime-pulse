@@ -6,10 +6,11 @@
           v-for="t in store.toasts"
           :key="t.id"
           class="toast"
-          :class="t.type === 'down' ? 'toast--down' : 'toast--up'"
+          :class="`toast--${t.type}`"
         >
-          <AlertTriangle v-if="t.type === 'down'" :size="15" class="toast-icon" />
-          <CheckCircle   v-else                    :size="15" class="toast-icon" />
+          <AlertTriangle v-if="t.type === 'down' || t.type === 'error'" :size="15" class="toast-icon" />
+          <Info          v-else-if="t.type === 'info'"                   :size="15" class="toast-icon" />
+          <CheckCircle   v-else                                           :size="15" class="toast-icon" />
           <span class="toast-msg">{{ t.message }}</span>
           <button class="toast-close" :aria-label="'Dismiss'" @click="store.dismiss(t.id)">×</button>
         </div>
@@ -19,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { AlertTriangle, CheckCircle } from 'lucide-vue-next'
+import { AlertTriangle, CheckCircle, Info } from 'lucide-vue-next'
 import { useToastStore } from '../stores/toasts'
 
 const store = useToastStore()
@@ -52,15 +53,10 @@ const store = useToastStore()
   pointer-events: all;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 
-  &--down {
-    background: rgba(185, 30, 42, 0.95);
-    color: #fff;
-  }
-
-  &--up {
-    background: rgba(30, 120, 60, 0.95);
-    color: #fff;
-  }
+  &--down  { background: rgba(185, 30, 42, 0.95); color: #fff; }
+  &--up    { background: rgba(30, 120, 60, 0.95); color: #fff; }
+  &--info  { background: rgba(30, 80, 160, 0.95); color: #fff; }
+  &--error { background: rgba(185, 30, 42, 0.95); color: #fff; }
 }
 
 .toast-icon {

@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Monitor } from '../stores/monitors'
-import { useMonitorStore, DOWN, UP, PENDING } from '../stores/monitors'
+import { useMonitorStore, DOWN, UP, PENDING, PAUSED } from '../stores/monitors'
 
 const props = defineProps<{ monitor: Monitor; isSelected: boolean }>()
 defineEmits<{ select: [id: number] }>()
@@ -35,6 +35,7 @@ const dotClass = computed(() => ({
   'dot--up':      currentStatus.value === UP,
   'dot--down':    currentStatus.value === DOWN,
   'dot--pending': currentStatus.value === PENDING,
+  'dot--paused':  currentStatus.value === PAUSED,
 }))
 
 const miniBeats = computed(() => {
@@ -78,6 +79,7 @@ const miniBeats = computed(() => {
   &.dot--up      { background: $primary; box-shadow: 0 0 6px rgba(92,221,139,0.6); }
   &.dot--down    { background: $danger;  box-shadow: 0 0 6px rgba(220,53,69,0.6); }
   &.dot--pending { background: $warning; }
+  &.dot--paused  { background: #6b7280; }
 }
 
 .monitor-item__name {

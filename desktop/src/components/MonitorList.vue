@@ -2,7 +2,7 @@
   <div class="monitor-list">
     <!-- Header -->
     <div class="monitor-list__header">
-      <img src="/vite.svg" class="app-logo" alt="" />
+      <img src="/favicon.svg" class="app-logo" alt="" />
       <span class="app-title">Uptime Pulse</span>
       <div class="header-actions">
         <button class="btn-icon-only" :title="theme.dark ? 'Switch to light' : 'Switch to dark'" @click="theme.toggle()">
