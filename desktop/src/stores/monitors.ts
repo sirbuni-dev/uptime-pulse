@@ -6,6 +6,7 @@ import { useToastStore } from './toasts'
 export const DOWN    = 0
 export const UP      = 1
 export const PENDING = 2
+export const PAUSED  = 3
 
 export interface Monitor {
   id:        number
@@ -61,6 +62,8 @@ export const useMonitorStore = defineStore('monitors', {
 
   getters: {
     currentStatus: (state) => (monitorId: number): number => {
+      const monitor = state.monitors.find(m => m.id === monitorId)
+      if (monitor && !monitor.active) return PAUSED
       const beats = state.heartbeats[monitorId]
       return beats && beats.length > 0 ? beats[0].status : PENDING
     },

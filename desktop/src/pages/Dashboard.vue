@@ -15,7 +15,7 @@
     />
 
     <main class="dashboard__main">
-      <MonitorDetail v-if="selectedMonitor" :monitor-id="selectedId!" />
+      <MonitorDetail v-if="selectedMonitor" :monitor-id="selectedId!" @deleted="selectedId = null" />
       <div v-else class="dashboard__empty">
         <Activity :size="40" class="empty-icon" />
         <p>Select a monitor from the list, or add a new one.</p>
