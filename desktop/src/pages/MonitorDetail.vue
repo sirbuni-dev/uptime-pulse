@@ -120,7 +120,7 @@
         <tbody>
           <tr v-for="b in paginatedBeats" :key="b.id" :class="rowClass(b.status)">
             <td><StatusBadge :status="b.status" /></td>
-            <td class="td-time">{{ b.checkedAt }}</td>
+            <td class="td-time">{{ formatDateTime(b.checkedAt) }}</td>
             <td>{{ b.ping != null ? b.ping.toFixed(0) + 'ms' : '—' }}</td>
             <td class="td-msg">{{ b.msg ?? '' }}</td>
           </tr>
@@ -157,6 +157,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { formatDateTime } from '../utils/time'
 import {
   Pause, Play, Pencil, Copy, Trash2,
   ExternalLink, Activity, ChevronLeft, ChevronRight,

@@ -24,6 +24,7 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import type { Heartbeat } from '../stores/monitors'
 import { DOWN, UP, PENDING } from '../stores/monitors'
+import { formatDateTime } from '../utils/time'
 
 const props = defineProps<{ beats: Heartbeat[] }>()
 
@@ -121,7 +122,7 @@ function onMouseMove(e: MouseEvent) {
         visible: true,
         statusLabel,
         statusClass,
-        time:    beat.checkedAt,
+        time:    formatDateTime(beat.checkedAt),
         msg:     beat.msg ?? '',
         ping:    beat.ping,
         clientX: e.clientX,
