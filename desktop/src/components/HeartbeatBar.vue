@@ -43,7 +43,7 @@ const tooltip    = ref({ visible: false, statusLabel: '', statusClass: '', time:
 
 const visibleBeats = computed(() => {
   const n     = maxBeats.value
-  const beats = [...props.beats].reverse().slice(0, n)
+  const beats = [...props.beats].slice(0, n).reverse()
   while (beats.length < n) beats.unshift(null as any)
   return beats
 })
