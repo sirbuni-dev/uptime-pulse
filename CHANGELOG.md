@@ -5,6 +5,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [desktop-v1.0.2] — 2026-05-17
+
+### Fixed
+
+- **Heartbeat bar tooltip shows wrong time** — The bar was displaying the oldest
+  `n` beats instead of the newest `n`, causing the hover tooltip timestamp to lag
+  ~40–50 minutes behind the actual last check shown in the Recent Checks table.
+  Fixed by slicing the newest beats first before reversing to chronological order.
+
+---
+
 ## [desktop-v1.0.0] — 2026-05-15
 
 ### Added — Desktop App (Tauri v2 + Vue 3)
